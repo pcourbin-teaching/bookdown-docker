@@ -1,0 +1,28 @@
+# Rscript -e "bookdown::render_book('.', 'all')"
+
+version: '3'
+services:
+  bookdownbase:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+    image: pcourbin/bookdown:base
+    container_name: bookdownbase
+    environment:
+      mainFile: index.Rmd
+    volumes:
+      - ./book:/book
+  bookdownuser:
+    build:
+      context: .
+      dockerfile: Dockerfile.user
+      args:
+        bookdownuser: docker
+        uid: 1000
+        gid: 1000
+    image: pcourbin/bookdown:user1000
+    container_name: bookdown
+    environment:
+      mainFile: index.Rmd
+    volumes:
+      - ./book:/book

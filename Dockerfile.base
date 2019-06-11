@@ -1,0 +1,27 @@
+FROM r-base:3.6.0
+
+RUN apt-get update \
+    && apt-get install -y \
+      pandoc \
+      imagemagick \
+      texlive \
+      texlive-latex-extra \
+      texinfo \
+      texlive-xetex \
+      pandoc pandoc-citeproc \
+      python libpython-dev \
+      python3 libpython3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN Rscript -e 'install.packages("bookdown")' \
+  && Rscript -e 'install.packages("reticulate")' #\
+  # && Rscript -e 'tinytex::install_tinytex()'
+
+ARG b_mainFile=index.Rmd
+ENV mainFile=$b_mainFile
+
+COPY run.sh /
+RUN chmod +x /run.sh
+WORKDIR /book
+
+CMD [ "/run.sh" ]
