@@ -16,7 +16,8 @@ ENV b_bookdownuser=$bookdownuser
 
 # add non-root user(workaround for docker)
 RUN testName="$(awk -v uid=$b_uid -F":" '{ if($3==uid){print $1} }' /etc/passwd)" && \
-  if [ $testName = "" ] && [ "$b_bookdownuser" != "root" ] ; then groupadd $b_gid ; useradd -m -g $b_gid -u $b_uid gitbook ; \
+  echo $testName ; echo $b_bookdownuser ; \
+  if [ "${testName}" = "" ] && [ "${b_bookdownuser}" != "root" ] ; then groupadd $b_gid && useradd -m -u $b_uid $b_bookdownuser && usermod -a -G $b_gid $b_bookdownuser ; echo "Create user '${b_bookdownuser}'" ;\
   else  (if [ $testName != "" ] && [ "$b_bookdownuser" != "$testName" ] ; then \
   (>&2 echo "You have a choose a uid '${b_uid}' which is already taken. If you want to use this uid, please, juste select as 'bookdownuser' the name '${testName}'") ; fi ; ); \
   fi && \
