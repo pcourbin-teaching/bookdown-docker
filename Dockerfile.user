@@ -9,19 +9,16 @@ WORKDIR /book
 
 ARG uid=0
 ENV b_uid=$uid
-ARG gid=0
-ENV b_gid=$gid
 ARG bookdownuser=root
 ENV b_bookdownuser=$bookdownuser
 
 # add non-root user(workaround for docker)
 RUN testName="$(awk -v uid=$b_uid -F":" '{ if($3==uid){print $1} }' /etc/passwd)" && \
-  echo $testName ; echo $b_bookdownuser ; \
-  if [ "${testName}" = "" ] && [ "${b_bookdownuser}" != "root" ] ; then groupadd $b_gid && useradd -m -u $b_uid $b_bookdownuser && usermod -a -G $b_gid $b_bookdownuser ; echo "Create user '${b_bookdownuser}'" ;\
+  if [ "${testName}" = "" ] && [ "${b_bookdownuser}" != "root" ] ; then useradd -m -u $b_uid $b_bookdownuser ; echo "Create user '${b_bookdownuser}'" ;\
   else  (if [ $testName != "" ] && [ "$b_bookdownuser" != "$testName" ] ; then \
   (>&2 echo "You have a choose a uid '${b_uid}' which is already taken. If you want to use this uid, please, juste select as 'bookdownuser' the name '${testName}'") ; fi ; ); \
   fi && \
-  (>&2 echo We will try to use the usergroup $b_gid and user $b_uid / $b_bookdownuser) ;
+  (>&2 echo We will try to use the user $b_uid / $b_bookdownuser) ;
 USER $b_bookdownuser
 
 CMD [ "/run.sh" ]

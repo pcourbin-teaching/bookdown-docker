@@ -19,7 +19,6 @@ services:
       args:
         bookdownuser: docker
         uid: 1000
-        gid: 1000
     image: pcourbin/bookdown:user1000
     container_name: bookdown
     environment:
