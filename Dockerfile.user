@@ -3,10 +3,6 @@ FROM pcourbin/bookdown:base
 ARG b_mainFile=index.Rmd
 ENV mainFile=$b_mainFile
 
-COPY run.sh /
-RUN chmod +x /run.sh
-WORKDIR /book
-
 ARG uid=0
 ENV b_uid=$uid
 ARG bookdownuser=root
