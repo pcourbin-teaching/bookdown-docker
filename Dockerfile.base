@@ -16,7 +16,9 @@ RUN apt-get update \
 RUN Rscript -e 'install.packages("bookdown")' \
   && Rscript -e 'install.packages("reticulate")' \
   && Rscript -e 'install.packages("devtools")' \
-  && Rscript -e 'devtools::install_github("ropenscilabs/icon")' #\
+  && Rscript -e 'devtools::install_github("ropenscilabs/icon")' \
+  && Rscript -e 'install.packages("webshot")' \
+  && Rscript -e 'webshot::install_phantomjs()' #\
   # && Rscript -e 'tinytex::install_tinytex()'
 
 ARG b_mainFile=index.Rmd
