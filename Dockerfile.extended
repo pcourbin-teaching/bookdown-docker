@@ -1,0 +1,13 @@
+FROM pcourbin/bookdown:base
+
+RUN apt-get update \
+    && apt-get install -y \
+      libssl-dev \
+      libcurl4-openssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN  Rscript -e 'install.packages("devtools")' \
+  && Rscript -e 'devtools::install_github("ropenscilabs/icon")'
+
+RUN Rscript -e 'install.packages("webshot")' \
+  && Rscript -e 'webshot::install_phantomjs()'

@@ -14,18 +14,13 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN Rscript -e 'install.packages("bookdown")' \
-  && Rscript -e 'install.packages("reticulate")' \
-  && Rscript -e 'install.packages("devtools")' \
-  && Rscript -e 'devtools::install_github("ropenscilabs/icon")' \
-  && Rscript -e 'install.packages("webshot")' \
-  && Rscript -e 'webshot::install_phantomjs()' #\
-  # && Rscript -e 'tinytex::install_tinytex()'
+  && Rscript -e 'install.packages("reticulate")'
 
 ARG b_mainFile=index.Rmd
 ENV mainFile=$b_mainFile
 
-COPY run.sh /
-RUN chmod +x /run.sh
+COPY bookdown.sh /bin/bookdown
+RUN chmod +x /bin/bookdown
 WORKDIR /book
 
-CMD [ "/run.sh" ]
+CMD [ "/bin/bookdown" ]

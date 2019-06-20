@@ -1,4 +1,5 @@
-FROM pcourbin/bookdown:base
+FROM pcourbin/bookdown:extended
+# Or FROM pcourbin/bookdown:base
 
 ARG b_mainFile=index.Rmd
 ENV mainFile=$b_mainFile
@@ -8,7 +9,7 @@ ENV b_uid=$uid
 ARG bookdownuser=root
 ENV b_bookdownuser=$bookdownuser
 
-# add non-root user(workaround for docker)
+# add non-root user (workaround for docker)
 RUN testName="$(awk -v uid=$b_uid -F":" '{ if($3==uid){print $1} }' /etc/passwd)" && \
   if [ "${testName}" = "" ] && [ "${b_bookdownuser}" != "root" ] ; then useradd -m -u $b_uid $b_bookdownuser ; echo "Create user '${b_bookdownuser}'" ;\
   else  (if [ $testName != "" ] && [ "$b_bookdownuser" != "$testName" ] ; then \
@@ -16,5 +17,3 @@ RUN testName="$(awk -v uid=$b_uid -F":" '{ if($3==uid){print $1} }' /etc/passwd)
   fi && \
   (>&2 echo We will try to use the user $b_uid / $b_bookdownuser) ;
 USER $b_bookdownuser
-
-CMD [ "/run.sh" ]

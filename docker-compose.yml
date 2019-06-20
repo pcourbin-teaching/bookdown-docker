@@ -2,17 +2,27 @@
 
 version: '3'
 services:
-  bookdownbase:
+  base:
     build:
       context: .
       dockerfile: Dockerfile.base
     image: pcourbin/bookdown:base
-    container_name: bookdownbase
+    container_name: bookdown_base
     environment:
       mainFile: index.Rmd
     volumes:
       - ./book:/book
-  bookdownuser:
+  extended:
+    build:
+      context: .
+      dockerfile: Dockerfile.extended
+    image: pcourbin/bookdown:extended
+    container_name: bookdown_extended
+    environment:
+      mainFile: index.Rmd
+    volumes:
+      - ./book:/book
+  user:
     build:
       context: .
       dockerfile: Dockerfile.user
@@ -20,7 +30,7 @@ services:
         bookdownuser: docker
         uid: 1000
     image: pcourbin/bookdown:user1000
-    container_name: bookdown
+    container_name: bookdown_user
     environment:
       mainFile: index.Rmd
     volumes:
